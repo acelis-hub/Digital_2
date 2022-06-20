@@ -1,0 +1,173 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "serial_tx",
+					"strict" : false
+				},
+				{
+					"name" : "led0",
+					"strict" : false
+				},
+				{
+					"name" : "led1",
+					"strict" : false
+				},
+				{
+					"name" : "led2",
+					"strict" : false
+				},
+				{
+					"name" : "led3",
+					"strict" : false
+				},
+				{
+					"name" : "led4",
+					"strict" : false
+				},
+				{
+					"name" : "led5",
+					"strict" : false
+				},
+				{
+					"name" : "led6",
+					"strict" : false
+				},
+				{
+					"name" : "led7",
+					"strict" : false
+				},
+				{
+					"name" : "led8",
+					"strict" : false
+				},
+				{
+					"name" : "led9",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment0",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment1",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment2",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment3",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment4",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment5",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment6",
+					"strict" : false
+				},
+				{
+					"name" : "display_segment7",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit0",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit1",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit2",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit3",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit4",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit5",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit6",
+					"strict" : false
+				},
+				{
+					"name" : "display_digit7",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "cpu_reset",
+					"strict" : false
+				},
+				{
+					"name" : "sw7",
+					"strict" : false
+				},
+				{
+					"name" : "sw5",
+					"strict" : false
+				},
+				{
+					"name" : "sw6",
+					"strict" : false
+				},
+				{
+					"name" : "sw3",
+					"strict" : false
+				},
+				{
+					"name" : "sw4",
+					"strict" : false
+				},
+				{
+					"name" : "sw2",
+					"strict" : false
+				},
+				{
+					"name" : "btnl",
+					"strict" : false
+				},
+				{
+					"name" : "sw1",
+					"strict" : false
+				},
+				{
+					"name" : "btnr",
+					"strict" : false
+				},
+				{
+					"name" : "sw0",
+					"strict" : false
+				},
+				{
+					"name" : "btnc",
+					"strict" : false
+				},
+				{
+					"name" : "serial_rx",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

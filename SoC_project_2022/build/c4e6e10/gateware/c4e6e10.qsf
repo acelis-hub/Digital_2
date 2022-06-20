@@ -1,0 +1,87 @@
+set_global_assignment -name DEVICE EP4CE10E22C8
+set_global_assignment -name SYSTEMVERILOG_FILE /home/alejo/pythondata-cpu-picorv32/pythondata_cpu_picorv32/verilog/picorv32.v -library work
+set_global_assignment -name SYSTEMVERILOG_FILE /home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/build/c4e6e10/gateware/c4e6e10.v -library work
+set_global_assignment -name top_level_entity c4e6e10
+set_location_assignment -comment "serial:0.tx" -to serial_tx Pin_113
+set_instance_assignment -name io_standard -comment "serial:0.tx" "3.3-V LVTTL" -to serial_tx
+set_location_assignment -comment "serial:0.rx" -to serial_rx Pin_114
+set_instance_assignment -name io_standard -comment "serial:0.rx" "3.3-V LVTTL" -to serial_rx
+set_location_assignment -comment "clk:0" -to clk Pin_23
+set_instance_assignment -name io_standard -comment "clk:0" "3.3-V LVTTL" -to clk
+set_location_assignment -comment "cpu_reset:0" -to cpu_reset Pin_86
+set_instance_assignment -name io_standard -comment "cpu_reset:0" "3.3-V LVTTL" -to cpu_reset
+set_location_assignment -comment "led:0" -to led0 Pin_72
+set_instance_assignment -name io_standard -comment "led:0" "3.3-V LVTTL" -to led0
+set_location_assignment -comment "led:1" -to led1 Pin_73
+set_instance_assignment -name io_standard -comment "led:1" "3.3-V LVTTL" -to led1
+set_location_assignment -comment "led:2" -to led2 Pin_74
+set_instance_assignment -name io_standard -comment "led:2" "3.3-V LVTTL" -to led2
+set_location_assignment -comment "led:3" -to led3 Pin_80
+set_instance_assignment -name io_standard -comment "led:3" "3.3-V LVTTL" -to led3
+set_location_assignment -comment "led:4" -to led4 Pin_83
+set_instance_assignment -name io_standard -comment "led:4" "3.3-V LVTTL" -to led4
+set_location_assignment -comment "led:5" -to led5 Pin_84
+set_instance_assignment -name io_standard -comment "led:5" "3.3-V LVTTL" -to led5
+set_location_assignment -comment "led:6" -to led6 Pin_77
+set_instance_assignment -name io_standard -comment "led:6" "3.3-V LVTTL" -to led6
+set_location_assignment -comment "led:7" -to led7 Pin_76
+set_instance_assignment -name io_standard -comment "led:7" "3.3-V LVTTL" -to led7
+set_location_assignment -comment "led:8" -to led8 Pin_75
+set_instance_assignment -name io_standard -comment "led:8" "3.3-V LVTTL" -to led8
+set_location_assignment -comment "led:9" -to led9 Pin_71
+set_instance_assignment -name io_standard -comment "led:9" "3.3-V LVTTL" -to led9
+set_location_assignment -comment "sw:0" -to sw0 Pin_66
+set_instance_assignment -name io_standard -comment "sw:0" "3.3-V LVTTL" -to sw0
+set_location_assignment -comment "sw:1" -to sw1 Pin_67
+set_instance_assignment -name io_standard -comment "sw:1" "3.3-V LVTTL" -to sw1
+set_location_assignment -comment "sw:2" -to sw2 Pin_68
+set_instance_assignment -name io_standard -comment "sw:2" "3.3-V LVTTL" -to sw2
+set_location_assignment -comment "sw:3" -to sw3 Pin_58
+set_instance_assignment -name io_standard -comment "sw:3" "3.3-V LVTTL" -to sw3
+set_location_assignment -comment "sw:4" -to sw4 Pin_59
+set_instance_assignment -name io_standard -comment "sw:4" "3.3-V LVTTL" -to sw4
+set_location_assignment -comment "sw:5" -to sw5 Pin_60
+set_instance_assignment -name io_standard -comment "sw:5" "3.3-V LVTTL" -to sw5
+set_location_assignment -comment "sw:6" -to sw6 Pin_64
+set_instance_assignment -name io_standard -comment "sw:6" "3.3-V LVTTL" -to sw6
+set_location_assignment -comment "sw:7" -to sw7 Pin_65
+set_instance_assignment -name io_standard -comment "sw:7" "3.3-V LVTTL" -to sw7
+set_location_assignment -comment "btnc:0" -to btnc Pin_87
+set_instance_assignment -name io_standard -comment "btnc:0" "3.3-V LVTTL" -to btnc
+set_location_assignment -comment "btnr:2" -to btnr Pin_90
+set_instance_assignment -name io_standard -comment "btnr:2" "3.3-V LVTTL" -to btnr
+set_location_assignment -comment "btnl:1" -to btnl Pin_91
+set_instance_assignment -name io_standard -comment "btnl:1" "3.3-V LVTTL" -to btnl
+set_location_assignment -comment "display_segment:0" -to display_segment0 Pin_127
+set_instance_assignment -name io_standard -comment "display_segment:0" "3.3-V LVTTL" -to display_segment0
+set_location_assignment -comment "display_segment:1" -to display_segment1 Pin_126
+set_instance_assignment -name io_standard -comment "display_segment:1" "3.3-V LVTTL" -to display_segment1
+set_location_assignment -comment "display_segment:2" -to display_segment2 Pin_125
+set_instance_assignment -name io_standard -comment "display_segment:2" "3.3-V LVTTL" -to display_segment2
+set_location_assignment -comment "display_segment:3" -to display_segment3 Pin_124
+set_instance_assignment -name io_standard -comment "display_segment:3" "3.3-V LVTTL" -to display_segment3
+set_location_assignment -comment "display_segment:4" -to display_segment4 Pin_121
+set_instance_assignment -name io_standard -comment "display_segment:4" "3.3-V LVTTL" -to display_segment4
+set_location_assignment -comment "display_segment:5" -to display_segment5 Pin_120
+set_instance_assignment -name io_standard -comment "display_segment:5" "3.3-V LVTTL" -to display_segment5
+set_location_assignment -comment "display_segment:6" -to display_segment6 Pin_119
+set_instance_assignment -name io_standard -comment "display_segment:6" "3.3-V LVTTL" -to display_segment6
+set_location_assignment -comment "display_segment:7" -to display_segment7 Pin_115
+set_instance_assignment -name io_standard -comment "display_segment:7" "3.3-V LVTTL" -to display_segment7
+set_location_assignment -comment "display_digit:0" -to display_digit0 Pin_128
+set_instance_assignment -name io_standard -comment "display_digit:0" "3.3-V LVTTL" -to display_digit0
+set_location_assignment -comment "display_digit:1" -to display_digit1 Pin_129
+set_instance_assignment -name io_standard -comment "display_digit:1" "3.3-V LVTTL" -to display_digit1
+set_location_assignment -comment "display_digit:2" -to display_digit2 Pin_132
+set_instance_assignment -name io_standard -comment "display_digit:2" "3.3-V LVTTL" -to display_digit2
+set_location_assignment -comment "display_digit:3" -to display_digit3 Pin_133
+set_instance_assignment -name io_standard -comment "display_digit:3" "3.3-V LVTTL" -to display_digit3
+set_location_assignment -comment "display_digit:4" -to display_digit4 Pin_135
+set_instance_assignment -name io_standard -comment "display_digit:4" "3.3-V LVTTL" -to display_digit4
+set_location_assignment -comment "display_digit:5" -to display_digit5 Pin_136
+set_instance_assignment -name io_standard -comment "display_digit:5" "3.3-V LVTTL" -to display_digit5
+set_location_assignment -comment "display_digit:6" -to display_digit6 Pin_137
+set_instance_assignment -name io_standard -comment "display_digit:6" "3.3-V LVTTL" -to display_digit6
+set_location_assignment -comment "display_digit:7" -to display_digit7 Pin_138
+set_instance_assignment -name io_standard -comment "display_digit:7" "3.3-V LVTTL" -to display_digit7
+set_global_assignment -name SDC_FILE c4e6e10.sdc
