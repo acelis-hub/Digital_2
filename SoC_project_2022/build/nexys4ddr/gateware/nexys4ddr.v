@@ -9,7 +9,7 @@
 // Filename   : nexys4ddr.v
 // Device     : xc7a100t-CSG324-1
 // LiteX sha1 : --------
-// Date       : 2022-06-19 19:34:05
+// Date       : 2022-06-26 11:54:36
 //------------------------------------------------------------------------------
 
 
@@ -65,7 +65,21 @@ module nexys4ddr (
 	output reg  ledRGB1_b,
 	output reg  ledRGB2_r,
 	output reg  ledRGB2_g,
-	output reg  ledRGB2_b
+	output reg  ledRGB2_b,
+	output wire vga_red0,
+	output wire vga_red1,
+	output wire vga_red2,
+	output wire vga_red3,
+	output wire vga_green0,
+	output wire vga_green1,
+	output wire vga_green2,
+	output wire vga_green3,
+	output wire vga_blue0,
+	output wire vga_blue1,
+	output wire vga_blue2,
+	output wire vga_blue3,
+	output wire hsync,
+	output wire vsync
 );
 
 
@@ -440,6 +454,26 @@ reg  [31:0] ledRGB_2_b_width_storage = 32'd0;
 reg  ledRGB_2_b_width_re = 1'd0;
 reg  [31:0] ledRGB_2_b_period_storage = 32'd0;
 reg  ledRGB_2_b_period_re = 1'd0;
+reg  [9:0] h_count = 10'd0;
+reg  [9:0] v_count = 10'd0;
+reg  [1:0] pxl_tick_count = 2'd0;
+reg  pxl_tick = 1'd0;
+wire active;
+reg  [18:0] p_r_adr = 19'd0;
+wire [11:0] p_r_dat_r;
+wire [18:0] p_w_adr;
+wire [11:0] p_w_dat_r;
+wire p_w_we;
+wire [11:0] p_w_dat_w;
+reg  [18:0] mem_adr_storage = 19'd0;
+reg  mem_adr_re = 1'd0;
+reg  mem_we_storage = 1'd0;
+reg  mem_we_re = 1'd0;
+reg  [11:0] mem_data_w_storage = 12'd0;
+reg  mem_data_w_re = 1'd0;
+wire [11:0] mem_data_r_status;
+wire mem_data_r_we;
+reg  mem_data_r_re = 1'd0;
 reg  rs232phytx_state = 1'd0;
 reg  rs232phytx_next_state = 1'd0;
 reg  [3:0] tx_count_rs232phytx_next_value0 = 4'd0;
@@ -730,6 +764,27 @@ wire csrbank9_rxfull_r;
 reg  csrbank9_rxfull_we = 1'd0;
 wire csrbank9_rxfull_w;
 wire csrbank9_sel;
+wire [13:0] interface10_bank_bus_adr;
+wire interface10_bank_bus_we;
+wire [31:0] interface10_bank_bus_dat_w;
+reg  [31:0] interface10_bank_bus_dat_r = 32'd0;
+reg  csrbank10_mem_adr0_re = 1'd0;
+wire [18:0] csrbank10_mem_adr0_r;
+reg  csrbank10_mem_adr0_we = 1'd0;
+wire [18:0] csrbank10_mem_adr0_w;
+reg  csrbank10_mem_we0_re = 1'd0;
+wire csrbank10_mem_we0_r;
+reg  csrbank10_mem_we0_we = 1'd0;
+wire csrbank10_mem_we0_w;
+reg  csrbank10_mem_data_w0_re = 1'd0;
+wire [11:0] csrbank10_mem_data_w0_r;
+reg  csrbank10_mem_data_w0_we = 1'd0;
+wire [11:0] csrbank10_mem_data_w0_w;
+reg  csrbank10_mem_data_r_re = 1'd0;
+wire [11:0] csrbank10_mem_data_r_r;
+reg  csrbank10_mem_data_r_we = 1'd0;
+wire [11:0] csrbank10_mem_data_r_w;
+wire csrbank10_sel;
 wire [13:0] csr_interconnect_adr;
 wire csr_interconnect_we;
 wire [31:0] csr_interconnect_dat_w;
@@ -800,9 +855,9 @@ assign interface1_ram_bus_dat_r = sram1_dat_r;
 assign sram1_dat_w = interface1_ram_bus_dat_w;
 always @(*) begin
 	rs232phytx_next_state <= 1'd0;
-	tx_enable <= 1'd0;
 	tx_count_rs232phytx_next_value0 <= 4'd0;
 	tx_count_rs232phytx_next_value_ce0 <= 1'd0;
+	tx_enable <= 1'd0;
 	serial_tx_rs232phytx_next_value1 <= 1'd0;
 	serial_tx_rs232phytx_next_value_ce1 <= 1'd0;
 	tx_data_rs232phytx_next_value2 <= 8'd0;
@@ -841,11 +896,11 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	rx_source_payload_data <= 8'd0;
-	rx_enable <= 1'd0;
 	rs232phyrx_next_state <= 1'd0;
+	rx_source_payload_data <= 8'd0;
 	rx_count_rs232phyrx_next_value0 <= 4'd0;
 	rx_count_rs232phyrx_next_value_ce0 <= 1'd0;
+	rx_enable <= 1'd0;
 	rx_data_rs232phyrx_next_value1 <= 8'd0;
 	rx_data_rs232phyrx_next_value_ce1 <= 1'd0;
 	rx_source_valid <= 1'd0;
@@ -1008,13 +1063,23 @@ assign displays6 = dig_6_storage;
 assign displays7 = dig_7_storage;
 assign {display_digit7, display_digit6, display_digit5, display_digit4, display_digit3, display_digit2, display_digit1, display_digit0} = (~(1'd1 <<< dgt_count));
 assign {display_segment7, display_segment6, display_segment5, display_segment4, display_segment3, display_segment2, display_segment1, display_segment0} = (~array_muxed0);
+assign p_w_adr = mem_adr_storage;
+assign p_w_we = mem_we_storage;
+assign mem_data_r_status = p_w_dat_r;
+assign p_w_dat_w = mem_data_w_storage;
+assign hsync = ((h_count >= 10'd656) & (h_count < 10'd752));
+assign vsync = ((v_count >= 9'd490) & (v_count < 9'd492));
+assign active = ((h_count < 10'd640) & (v_count < 9'd480));
+assign {vga_red3, vga_red2, vga_red1, vga_red0} = (active * p_r_dat_r[11:8]);
+assign {vga_green3, vga_green2, vga_green1, vga_green0} = (active * p_r_dat_r[7:4]);
+assign {vga_blue3, vga_blue2, vga_blue1, vga_blue0} = (active * p_r_dat_r[3:0]);
 always @(*) begin
-	basesoc_adr <= 14'd0;
-	basesoc_we <= 1'd0;
 	basesoc_dat_w <= 32'd0;
-	next_state <= 1'd0;
 	basesoc_wishbone_ack <= 1'd0;
 	basesoc_wishbone_dat_r <= 32'd0;
+	basesoc_adr <= 14'd0;
+	next_state <= 1'd0;
+	basesoc_we <= 1'd0;
 	next_state <= state;
 	case (state)
 		1'd1: begin
@@ -1111,7 +1176,7 @@ always @(*) begin
 end
 assign csrbank0_in_w = buttons_status[2:0];
 assign buttons_we = csrbank0_in_we;
-assign csrbank1_sel = (interface1_bank_bus_adr[13:9] == 3'd7);
+assign csrbank1_sel = (interface1_bank_bus_adr[13:9] == 4'd8);
 assign csrbank1_reset0_r = interface1_bank_bus_dat_w[1:0];
 always @(*) begin
 	csrbank1_reset0_we <= 1'd0;
@@ -1132,8 +1197,8 @@ always @(*) begin
 end
 assign csrbank1_bus_errors_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_bus_errors_re <= 1'd0;
 	csrbank1_bus_errors_we <= 1'd0;
+	csrbank1_bus_errors_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 2'd2))) begin
 		csrbank1_bus_errors_re <= interface1_bank_bus_we;
 		csrbank1_bus_errors_we <= (~interface1_bank_bus_we);
@@ -1171,8 +1236,8 @@ always @(*) begin
 end
 assign csrbank2_dig_20_r = interface2_bank_bus_dat_w[7:0];
 always @(*) begin
-	csrbank2_dig_20_we <= 1'd0;
 	csrbank2_dig_20_re <= 1'd0;
+	csrbank2_dig_20_we <= 1'd0;
 	if ((csrbank2_sel & (interface2_bank_bus_adr[8:0] == 2'd2))) begin
 		csrbank2_dig_20_re <= interface2_bank_bus_we;
 		csrbank2_dig_20_we <= (~interface2_bank_bus_we);
@@ -1207,8 +1272,8 @@ always @(*) begin
 end
 assign csrbank2_dig_60_r = interface2_bank_bus_dat_w[7:0];
 always @(*) begin
-	csrbank2_dig_60_re <= 1'd0;
 	csrbank2_dig_60_we <= 1'd0;
+	csrbank2_dig_60_re <= 1'd0;
 	if ((csrbank2_sel & (interface2_bank_bus_adr[8:0] == 3'd6))) begin
 		csrbank2_dig_60_re <= interface2_bank_bus_we;
 		csrbank2_dig_60_we <= (~interface2_bank_bus_we);
@@ -1243,8 +1308,8 @@ always @(*) begin
 end
 assign csrbank3_r_width0_r = interface3_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank3_r_width0_re <= 1'd0;
 	csrbank3_r_width0_we <= 1'd0;
+	csrbank3_r_width0_re <= 1'd0;
 	if ((csrbank3_sel & (interface3_bank_bus_adr[8:0] == 1'd1))) begin
 		csrbank3_r_width0_re <= interface3_bank_bus_we;
 		csrbank3_r_width0_we <= (~interface3_bank_bus_we);
@@ -1279,8 +1344,8 @@ always @(*) begin
 end
 assign csrbank3_g_period0_r = interface3_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank3_g_period0_we <= 1'd0;
 	csrbank3_g_period0_re <= 1'd0;
+	csrbank3_g_period0_we <= 1'd0;
 	if ((csrbank3_sel & (interface3_bank_bus_adr[8:0] == 3'd5))) begin
 		csrbank3_g_period0_re <= interface3_bank_bus_we;
 		csrbank3_g_period0_we <= (~interface3_bank_bus_we);
@@ -1343,8 +1408,8 @@ always @(*) begin
 end
 assign csrbank4_r_period0_r = interface4_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank4_r_period0_we <= 1'd0;
 	csrbank4_r_period0_re <= 1'd0;
+	csrbank4_r_period0_we <= 1'd0;
 	if ((csrbank4_sel & (interface4_bank_bus_adr[8:0] == 2'd2))) begin
 		csrbank4_r_period0_re <= interface4_bank_bus_we;
 		csrbank4_r_period0_we <= (~interface4_bank_bus_we);
@@ -1379,8 +1444,8 @@ always @(*) begin
 end
 assign csrbank4_b_enable0_r = interface4_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank4_b_enable0_re <= 1'd0;
 	csrbank4_b_enable0_we <= 1'd0;
+	csrbank4_b_enable0_re <= 1'd0;
 	if ((csrbank4_sel & (interface4_bank_bus_adr[8:0] == 3'd6))) begin
 		csrbank4_b_enable0_re <= interface4_bank_bus_we;
 		csrbank4_b_enable0_we <= (~interface4_bank_bus_we);
@@ -1427,8 +1492,8 @@ assign csrbank5_out0_w = leds_storage[9:0];
 assign csrbank6_sel = (interface6_bank_bus_adr[13:9] == 3'd4);
 assign csrbank6_orden0_r = interface6_bank_bus_dat_w[2:0];
 always @(*) begin
-	csrbank6_orden0_re <= 1'd0;
 	csrbank6_orden0_we <= 1'd0;
+	csrbank6_orden0_re <= 1'd0;
 	if ((csrbank6_sel & (interface6_bank_bus_adr[8:0] == 1'd0))) begin
 		csrbank6_orden0_re <= interface6_bank_bus_we;
 		csrbank6_orden0_we <= (~interface6_bank_bus_we);
@@ -1447,7 +1512,7 @@ always @(*) begin
 end
 assign csrbank7_in_w = switchs_status[7:0];
 assign switchs_we = csrbank7_in_we;
-assign csrbank8_sel = (interface8_bank_bus_adr[13:9] == 4'd8);
+assign csrbank8_sel = (interface8_bank_bus_adr[13:9] == 4'd9);
 assign csrbank8_load0_r = interface8_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank8_load0_we <= 1'd0;
@@ -1459,8 +1524,8 @@ always @(*) begin
 end
 assign csrbank8_reload0_r = interface8_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank8_reload0_we <= 1'd0;
 	csrbank8_reload0_re <= 1'd0;
+	csrbank8_reload0_we <= 1'd0;
 	if ((csrbank8_sel & (interface8_bank_bus_adr[8:0] == 1'd1))) begin
 		csrbank8_reload0_re <= interface8_bank_bus_we;
 		csrbank8_reload0_we <= (~interface8_bank_bus_we);
@@ -1513,8 +1578,8 @@ always @(*) begin
 end
 assign csrbank8_ev_enable0_r = interface8_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank8_ev_enable0_we <= 1'd0;
 	csrbank8_ev_enable0_re <= 1'd0;
+	csrbank8_ev_enable0_we <= 1'd0;
 	if ((csrbank8_sel & (interface8_bank_bus_adr[8:0] == 3'd7))) begin
 		csrbank8_ev_enable0_re <= interface8_bank_bus_we;
 		csrbank8_ev_enable0_we <= (~interface8_bank_bus_we);
@@ -1534,7 +1599,7 @@ assign csrbank8_ev_pending_w = timer_pending_status;
 assign timer_pending_we = csrbank8_ev_pending_we;
 assign timer_zero2 = timer_enable_storage;
 assign csrbank8_ev_enable0_w = timer_enable_storage;
-assign csrbank9_sel = (interface9_bank_bus_adr[13:9] == 4'd9);
+assign csrbank9_sel = (interface9_bank_bus_adr[13:9] == 4'd10);
 assign uart_rxtx_r = interface9_bank_bus_dat_w[7:0];
 always @(*) begin
 	uart_rxtx_re <= 1'd0;
@@ -1555,8 +1620,8 @@ always @(*) begin
 end
 assign csrbank9_rxempty_r = interface9_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank9_rxempty_re <= 1'd0;
 	csrbank9_rxempty_we <= 1'd0;
+	csrbank9_rxempty_re <= 1'd0;
 	if ((csrbank9_sel & (interface9_bank_bus_adr[8:0] == 2'd2))) begin
 		csrbank9_rxempty_re <= interface9_bank_bus_we;
 		csrbank9_rxempty_we <= (~interface9_bank_bus_we);
@@ -1573,8 +1638,8 @@ always @(*) begin
 end
 assign csrbank9_ev_pending_r = interface9_bank_bus_dat_w[1:0];
 always @(*) begin
-	csrbank9_ev_pending_we <= 1'd0;
 	csrbank9_ev_pending_re <= 1'd0;
+	csrbank9_ev_pending_we <= 1'd0;
 	if ((csrbank9_sel & (interface9_bank_bus_adr[8:0] == 3'd4))) begin
 		csrbank9_ev_pending_re <= interface9_bank_bus_we;
 		csrbank9_ev_pending_we <= (~interface9_bank_bus_we);
@@ -1600,8 +1665,8 @@ always @(*) begin
 end
 assign csrbank9_rxfull_r = interface9_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank9_rxfull_we <= 1'd0;
 	csrbank9_rxfull_re <= 1'd0;
+	csrbank9_rxfull_we <= 1'd0;
 	if ((csrbank9_sel & (interface9_bank_bus_adr[8:0] == 3'd7))) begin
 		csrbank9_rxfull_re <= interface9_bank_bus_we;
 		csrbank9_rxfull_we <= (~interface9_bank_bus_we);
@@ -1632,6 +1697,48 @@ assign csrbank9_txempty_w = uart_txempty_status;
 assign uart_txempty_we = csrbank9_txempty_we;
 assign csrbank9_rxfull_w = uart_rxfull_status;
 assign uart_rxfull_we = csrbank9_rxfull_we;
+assign csrbank10_sel = (interface10_bank_bus_adr[13:9] == 3'd7);
+assign csrbank10_mem_adr0_r = interface10_bank_bus_dat_w[18:0];
+always @(*) begin
+	csrbank10_mem_adr0_re <= 1'd0;
+	csrbank10_mem_adr0_we <= 1'd0;
+	if ((csrbank10_sel & (interface10_bank_bus_adr[8:0] == 1'd0))) begin
+		csrbank10_mem_adr0_re <= interface10_bank_bus_we;
+		csrbank10_mem_adr0_we <= (~interface10_bank_bus_we);
+	end
+end
+assign csrbank10_mem_we0_r = interface10_bank_bus_dat_w[0];
+always @(*) begin
+	csrbank10_mem_we0_we <= 1'd0;
+	csrbank10_mem_we0_re <= 1'd0;
+	if ((csrbank10_sel & (interface10_bank_bus_adr[8:0] == 1'd1))) begin
+		csrbank10_mem_we0_re <= interface10_bank_bus_we;
+		csrbank10_mem_we0_we <= (~interface10_bank_bus_we);
+	end
+end
+assign csrbank10_mem_data_w0_r = interface10_bank_bus_dat_w[11:0];
+always @(*) begin
+	csrbank10_mem_data_w0_we <= 1'd0;
+	csrbank10_mem_data_w0_re <= 1'd0;
+	if ((csrbank10_sel & (interface10_bank_bus_adr[8:0] == 2'd2))) begin
+		csrbank10_mem_data_w0_re <= interface10_bank_bus_we;
+		csrbank10_mem_data_w0_we <= (~interface10_bank_bus_we);
+	end
+end
+assign csrbank10_mem_data_r_r = interface10_bank_bus_dat_w[11:0];
+always @(*) begin
+	csrbank10_mem_data_r_re <= 1'd0;
+	csrbank10_mem_data_r_we <= 1'd0;
+	if ((csrbank10_sel & (interface10_bank_bus_adr[8:0] == 2'd3))) begin
+		csrbank10_mem_data_r_re <= interface10_bank_bus_we;
+		csrbank10_mem_data_r_we <= (~interface10_bank_bus_we);
+	end
+end
+assign csrbank10_mem_adr0_w = mem_adr_storage[18:0];
+assign csrbank10_mem_we0_w = mem_we_storage;
+assign csrbank10_mem_data_w0_w = mem_data_w_storage[11:0];
+assign csrbank10_mem_data_r_w = mem_data_r_status[11:0];
+assign mem_data_r_we = csrbank10_mem_data_r_we;
 assign csr_interconnect_adr = basesoc_adr;
 assign csr_interconnect_we = basesoc_we;
 assign csr_interconnect_dat_w = basesoc_dat_w;
@@ -1646,6 +1753,7 @@ assign interface6_bank_bus_adr = csr_interconnect_adr;
 assign interface7_bank_bus_adr = csr_interconnect_adr;
 assign interface8_bank_bus_adr = csr_interconnect_adr;
 assign interface9_bank_bus_adr = csr_interconnect_adr;
+assign interface10_bank_bus_adr = csr_interconnect_adr;
 assign interface0_bank_bus_we = csr_interconnect_we;
 assign interface1_bank_bus_we = csr_interconnect_we;
 assign interface2_bank_bus_we = csr_interconnect_we;
@@ -1656,6 +1764,7 @@ assign interface6_bank_bus_we = csr_interconnect_we;
 assign interface7_bank_bus_we = csr_interconnect_we;
 assign interface8_bank_bus_we = csr_interconnect_we;
 assign interface9_bank_bus_we = csr_interconnect_we;
+assign interface10_bank_bus_we = csr_interconnect_we;
 assign interface0_bank_bus_dat_w = csr_interconnect_dat_w;
 assign interface1_bank_bus_dat_w = csr_interconnect_dat_w;
 assign interface2_bank_bus_dat_w = csr_interconnect_dat_w;
@@ -1666,7 +1775,8 @@ assign interface6_bank_bus_dat_w = csr_interconnect_dat_w;
 assign interface7_bank_bus_dat_w = csr_interconnect_dat_w;
 assign interface8_bank_bus_dat_w = csr_interconnect_dat_w;
 assign interface9_bank_bus_dat_w = csr_interconnect_dat_w;
-assign csr_interconnect_dat_r = (((((((((interface0_bank_bus_dat_r | interface1_bank_bus_dat_r) | interface2_bank_bus_dat_r) | interface3_bank_bus_dat_r) | interface4_bank_bus_dat_r) | interface5_bank_bus_dat_r) | interface6_bank_bus_dat_r) | interface7_bank_bus_dat_r) | interface8_bank_bus_dat_r) | interface9_bank_bus_dat_r);
+assign interface10_bank_bus_dat_w = csr_interconnect_dat_w;
+assign csr_interconnect_dat_r = ((((((((((interface0_bank_bus_dat_r | interface1_bank_bus_dat_r) | interface2_bank_bus_dat_r) | interface3_bank_bus_dat_r) | interface4_bank_bus_dat_r) | interface5_bank_bus_dat_r) | interface6_bank_bus_dat_r) | interface7_bank_bus_dat_r) | interface8_bank_bus_dat_r) | interface9_bank_bus_dat_r) | interface10_bank_bus_dat_r);
 always @(*) begin
 	array_muxed0 <= 8'd0;
 	case (dgt_count)
@@ -2012,6 +2122,26 @@ always @(posedge sys_clk) begin
 		ledRGB_2_b_counter <= 1'd0;
 		ledRGB2_b <= 1'd0;
 	end
+	if ((pxl_tick_count >= 2'd3)) begin
+		pxl_tick_count <= 1'd0;
+		pxl_tick <= 1'd1;
+	end else begin
+		pxl_tick_count <= (pxl_tick_count + 1'd1);
+		pxl_tick <= 1'd0;
+	end
+	if (pxl_tick) begin
+		if ((h_count >= 10'd799)) begin
+			h_count <= 1'd0;
+			if ((v_count >= 10'd524)) begin
+				v_count <= 1'd0;
+			end else begin
+				v_count <= (v_count + 1'd1);
+			end
+		end else begin
+			h_count <= (h_count + 1'd1);
+		end
+	end
+	p_r_adr <= ((v_count * 10'd640) + h_count);
 	state <= next_state;
 	slave_sel_r <= slave_sel;
 	if (wait_1) begin
@@ -2380,6 +2510,36 @@ always @(posedge sys_clk) begin
 	uart_enable_re <= csrbank9_ev_enable0_re;
 	uart_txempty_re <= csrbank9_txempty_re;
 	uart_rxfull_re <= csrbank9_rxfull_re;
+	interface10_bank_bus_dat_r <= 1'd0;
+	if (csrbank10_sel) begin
+		case (interface10_bank_bus_adr[8:0])
+			1'd0: begin
+				interface10_bank_bus_dat_r <= csrbank10_mem_adr0_w;
+			end
+			1'd1: begin
+				interface10_bank_bus_dat_r <= csrbank10_mem_we0_w;
+			end
+			2'd2: begin
+				interface10_bank_bus_dat_r <= csrbank10_mem_data_w0_w;
+			end
+			2'd3: begin
+				interface10_bank_bus_dat_r <= csrbank10_mem_data_r_w;
+			end
+		endcase
+	end
+	if (csrbank10_mem_adr0_re) begin
+		mem_adr_storage[18:0] <= csrbank10_mem_adr0_r;
+	end
+	mem_adr_re <= csrbank10_mem_adr0_re;
+	if (csrbank10_mem_we0_re) begin
+		mem_we_storage <= csrbank10_mem_we0_r;
+	end
+	mem_we_re <= csrbank10_mem_we0_re;
+	if (csrbank10_mem_data_w0_re) begin
+		mem_data_w_storage[11:0] <= csrbank10_mem_data_w0_r;
+	end
+	mem_data_w_re <= csrbank10_mem_data_w0_re;
+	mem_data_r_re <= csrbank10_mem_data_r_re;
 	if (sys_rst) begin
 		reset_storage <= 2'd0;
 		reset_re <= 1'd0;
@@ -2488,6 +2648,18 @@ always @(posedge sys_clk) begin
 		ledRGB_2_b_enable_re <= 1'd0;
 		ledRGB_2_b_width_re <= 1'd0;
 		ledRGB_2_b_period_re <= 1'd0;
+		h_count <= 10'd0;
+		v_count <= 10'd0;
+		pxl_tick_count <= 2'd0;
+		pxl_tick <= 1'd0;
+		p_r_adr <= 19'd0;
+		mem_adr_storage <= 19'd0;
+		mem_adr_re <= 1'd0;
+		mem_we_storage <= 1'd0;
+		mem_we_re <= 1'd0;
+		mem_data_w_storage <= 12'd0;
+		mem_data_w_re <= 1'd0;
+		mem_data_r_re <= 1'd0;
 		rs232phytx_state <= 1'd0;
 		rs232phyrx_state <= 1'd0;
 		slave_sel_r <= 4'd0;
@@ -2616,6 +2788,26 @@ BloquePWM BloquePWM(
 	.pwm(pwm_out)
 );
 
+//------------------------------------------------------------------------------
+// Memory mem: 307200-words x 12-bit
+//------------------------------------------------------------------------------
+// Port 0 | Read: Sync  | Write: ---- | 
+// Port 1 | Read: Sync  | Write: Sync | Mode: Write-First | Write-Granularity: 12 
+reg [11:0] mem[0:307199];
+reg [18:0] mem_adr0;
+reg [18:0] mem_adr1;
+always @(posedge sys_clk) begin
+	mem_adr0 <= p_r_adr;
+end
+always @(posedge sys_clk) begin
+	if (p_w_we)
+		mem[p_w_adr] <= p_w_dat_w;
+	mem_adr1 <= p_w_adr;
+end
+assign p_r_dat_r = mem[mem_adr0];
+assign p_w_dat_r = mem[mem_adr1];
+
+
 picorv32 #(
 	.CATCH_ILLINSN(1'd1),
 	.CATCH_MISALIGN(1'd1),
@@ -2671,5 +2863,5 @@ picorv32 #(
 endmodule
 
 // -----------------------------------------------------------------------------
-//  Auto-Generated by LiteX on 2022-06-19 19:34:05.
+//  Auto-Generated by LiteX on 2022-06-26 11:54:36.
 //------------------------------------------------------------------------------

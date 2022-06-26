@@ -193,6 +193,62 @@ set_property IOSTANDARD LVCMOS33 [get_ports {ledRGB2_g}]
 set_property LOC G14 [get_ports {ledRGB2_b}]
 set_property IOSTANDARD LVCMOS33 [get_ports {ledRGB2_b}]
 
+# vga_red:0
+set_property LOC A3 [get_ports {vga_red0}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_red0}]
+
+# vga_red:1
+set_property LOC B4 [get_ports {vga_red1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_red1}]
+
+# vga_red:2
+set_property LOC C5 [get_ports {vga_red2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_red2}]
+
+# vga_red:3
+set_property LOC A4 [get_ports {vga_red3}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_red3}]
+
+# vga_green:0
+set_property LOC C6 [get_ports {vga_green0}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_green0}]
+
+# vga_green:1
+set_property LOC A5 [get_ports {vga_green1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_green1}]
+
+# vga_green:2
+set_property LOC B6 [get_ports {vga_green2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_green2}]
+
+# vga_green:3
+set_property LOC A6 [get_ports {vga_green3}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_green3}]
+
+# vga_blue:0
+set_property LOC B7 [get_ports {vga_blue0}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_blue0}]
+
+# vga_blue:1
+set_property LOC C7 [get_ports {vga_blue1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_blue1}]
+
+# vga_blue:2
+set_property LOC D7 [get_ports {vga_blue2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_blue2}]
+
+# vga_blue:3
+set_property LOC D8 [get_ports {vga_blue3}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vga_blue3}]
+
+# hsync:0
+set_property LOC B11 [get_ports {hsync}]
+set_property IOSTANDARD LVCMOS33 [get_ports {hsync}]
+
+# vsync:0
+set_property LOC B12 [get_ports {vsync}]
+set_property IOSTANDARD LVCMOS33 [get_ports {vsync}]
+
 ################################################################################
 # Design constraints
 ################################################################################

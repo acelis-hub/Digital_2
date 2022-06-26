@@ -78,6 +78,7 @@ static void help(void)
 	puts("rgbled                          - rgb test");
 	puts("display                         - display test");
 	puts("pwm                             - Test PWM");
+	puts("vga                             - Test VGA");
 }
 
 static void reboot(void)
@@ -147,23 +148,13 @@ static void switch_test(void)
 	}
 }
 
-static void test_pwm(void){
-	pwm_cntrl_orden_write(4);
-	delay_ms(3000);
-	pwm_cntrl_orden_write(5);
-	delay_ms(3000);
-	pwm_cntrl_orden_write(6);
-	delay_ms(3000);
-	pwm_cntrl_orden_write(4);
-	delay_ms(3000);
-	pwm_cntrl_orden_write(5);
-	delay_ms(3000);
-	pwm_cntrl_orden_write(6);
-}
-
 static void rgbled_test(void)
 {
+	
 	unsigned int T = 128;
+	
+	printf("Test del los interruptores... se interrumpe con el botton 1\n");
+	while(!(buttons_in_read()&1)) {
 	
 	ledRGB_1_r_period_write(T);
 	ledRGB_1_g_period_write(T);
@@ -181,24 +172,42 @@ static void rgbled_test(void)
 	
 	ledRGB_2_r_enable_write(1);
 	ledRGB_2_g_enable_write(1);
-	ledRGB_2_b_enable_write(1);
+	ledRGB_2_b_enable_write(1);	
 
 	for (unsigned int j=0; j<100; j++){
 		ledRGB_1_g_width_write(j);
+		ledRGB_2_g_width_write(j);
 		for (unsigned int i=0; i<100; i++){
 			ledRGB_1_r_width_write(100-i);
-			ledRGB_1_b_width_write(i);	
+			ledRGB_1_b_width_write(i);
+			ledRGB_2_r_width_write(100-i);
+			ledRGB_2_b_width_write(i);	
 			delay_ms(20);
 
-		}	
+		}
+			
 	}
 	
-
+	}
 
 }
 
+static void test_pwm(void){
+	pwm_cntrl_orden_write(1);
+	delay_ms(2000);
+	pwm_cntrl_orden_write(7);
+	delay_ms(2000);
+	pwm_cntrl_orden_write(6);
+	delay_ms(2000);
+	pwm_cntrl_orden_write(7);
+	delay_ms(2000);
+	pwm_cntrl_orden_write(6);
+	delay_ms(2000);
+	pwm_cntrl_orden_write(7);
+}
 
-/*static void vga_test(void)
+
+static void test_vga(void)
 {
 	int x,y;
 	
@@ -207,15 +216,15 @@ static void rgbled_test(void)
 			vga_cntrl_mem_we_write(0);
 			vga_cntrl_mem_adr_write(y*640+x);
 			if(x<640/3)	
-				vga_cntrl_mem_data_w_write(((int)(x/10)%2^(int)(y/10)%2)*15);
+				vga_cntrl_mem_data_w_write(((int)(x/5)%2^(int)(y/10)%2)*15);
 			else if(x<2*640/3) 
-				vga_cntrl_mem_data_w_write((((int)(x/10)%2^(int)(y/10)%2)*15)<<4);
+				vga_cntrl_mem_data_w_write((((int)(x/5)%2^(int)(y/10)%2)*15)<<4);
 			else 
-				vga_cntrl_mem_data_w_write((((int)(x/10)%2^(int)(y/10)%2)*15)<<8);
+				vga_cntrl_mem_data_w_write((((int)(x/5)%2^(int)(y/10)%2)*15)<<8);
 			vga_cntrl_mem_we_write(1);
 		}
 	}
-}*/
+}
 
 static void console_service(void)
 {
@@ -239,6 +248,8 @@ static void console_service(void)
 		rgbled_test();
 	else if(strcmp(token, "pwm") == 0)
 		test_pwm();
+	else if(strcmp(token, "vga") == 0)
+		test_vga();
 	prompt();
 }
 
