@@ -9,6 +9,7 @@
 
 #include "delay.h"
 #include "display.h"
+#include "uart1.h"
 
 static char *readstr(void)
 {
@@ -79,6 +80,7 @@ static void help(void)
 	puts("display                         - display test");
 	puts("pwm                             - Test PWM");
 	puts("vga                             - Test VGA");
+	puts("uart                            - Test UART");
 }
 
 static void reboot(void)
@@ -226,6 +228,19 @@ static void test_vga(void)
 	}
 }
 
+static void uart1_test(void){
+	printf("Test de la uart 1, debe poner en corto el pon RX Tx de la la UART1.\n");
+	
+	printf("se envia el caracter A por la uart 1  y al estar en loopback se recibe el caracter  y se retrasmite por la uart 0\n");
+	printf("se interrumpe con el botton 1\n");
+
+	while(!(buttons_in_read()&1)) {
+		uart1_write('H');
+		delay_ms(50);
+		uart_write(uart1_read());
+		}
+}
+
 static void console_service(void)
 {
 	char *str;
@@ -250,6 +265,8 @@ static void console_service(void)
 		test_pwm();
 	else if(strcmp(token, "vga") == 0)
 		test_vga();
+	else if(strcmp(token, "uart") == 0)
+		uart1_test();
 	prompt();
 }
 
@@ -258,6 +275,7 @@ int main(void)
 	irq_setmask(0);
 	irq_setie(1);
 	uart_init();
+	uart1_init();
 	//timer_init_irq(1000);
     
     puts("\n                     Prueba Inicial para Proyecto                  \n");

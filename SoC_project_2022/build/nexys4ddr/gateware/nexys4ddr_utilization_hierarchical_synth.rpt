@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-| Date         : Sun Jun 26 11:56:23 2022
+| Date         : Sun Jun 26 16:31:37 2022
 | Host         : alejo-ThinkPad-T430 running 64-bit Ubuntu 20.04.4 LTS
 | Command      : report_utilization -hierarchical -file nexys4ddr_utilization_hierarchical_synth.rpt
 | Design       : nexys4ddr
@@ -22,14 +22,14 @@ Table of Contents
 +------------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+
 |        Instance        |       Module      | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
 +------------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+
-| nexys4ddr              |             (top) |       3226 |       3122 |     104 |    0 | 2543 |    134 |      0 |          1 |
-|   (nexys4ddr)          |             (top) |        749 |        733 |      16 |    0 | 1384 |    134 |      0 |          1 |
+| nexys4ddr              |             (top) |       3306 |       3186 |     120 |    0 | 2696 |    134 |      0 |          1 |
+|   (nexys4ddr)          |             (top) |        835 |        803 |      32 |    0 | 1537 |    134 |      0 |          1 |
 |   BloquePWM            |         BloquePWM |         30 |         30 |       0 |    0 |   32 |      0 |      0 |          0 |
 |     DivisorF           |        DivFreqPWM |          5 |          5 |       0 |    0 |   14 |      0 |      0 |          0 |
 |     MaquinaEstadosPWM1 | MaquinaEstadosPWM |          5 |          5 |       0 |    0 |    2 |      0 |      0 |          0 |
 |     pwm1               |               PWM |         21 |         21 |       0 |    0 |   16 |      0 |      0 |          0 |
-|   picorv32             |          picorv32 |       2447 |       2359 |      88 |    0 | 1127 |      0 |      0 |          0 |
-|     (picorv32)         |          picorv32 |       1753 |       1665 |      88 |    0 |  672 |      0 |      0 |          0 |
+|   picorv32             |          picorv32 |       2441 |       2353 |      88 |    0 | 1127 |      0 |      0 |          0 |
+|     (picorv32)         |          picorv32 |       1747 |       1659 |      88 |    0 |  672 |      0 |      0 |          0 |
 |     pcpi_div           | picorv32_pcpi_div |        394 |        394 |       0 |    0 |  200 |      0 |      0 |          0 |
 |     pcpi_mul           | picorv32_pcpi_mul |        300 |        300 |       0 |    0 |  255 |      0 |      0 |          0 |
 +------------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+

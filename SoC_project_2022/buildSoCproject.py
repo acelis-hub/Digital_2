@@ -13,6 +13,7 @@ from litex.soc.integration.builder import *
 from litex.soc.interconnect.csr import *
 
 from litex.soc.cores import gpio
+from litex.soc.cores import uart
 from module import rgbled
 from module import sevensegment
 from module import vgacontroller
@@ -36,7 +37,11 @@ class BaseSoC(SoCCore):
 		platform.add_source("module/verilog/PWM/MaquinaEstadosPWM.v")
 		platform.add_source("module/verilog/PWM/DivFreqPWM.v")
 
-		
+		#PWM
+		platform.add_source("module/verilog/UART/TOP.v")
+		platform.add_source("module/verilog/UART/UART_rx.v")
+		platform.add_source("module/verilog/UART/UART_tx.v")
+		platform.add_source("module/verilog/UART/UART_baudrate_generator.v")
 		
 		# SoC with CPU
 		SoCCore.__init__(self, platform,
@@ -89,6 +94,21 @@ class BaseSoC(SoCCore):
 		vga_blue = Cat(*[platform.request("vga_blue", i) for i in range(4)])
 		self.submodules.vga_cntrl = vgacontroller.VGAcontroller(platform.request("hsync"),platform.request("vsync"), vga_red, vga_green, vga_blue)
 		
+		#UART
+		from litex.soc.cores import uart
+		self.submodules.uart1_phy = uart.UARTPHY(
+			pads     = platform.request("uart1"),
+			clk_freq = self.sys_clk_freq,
+			baudrate = 9600)
+		self.submodules.uart1 = ResetInserter()(uart.UART(self.uart1_phy,
+			tx_fifo_depth = 16,
+			rx_fifo_depth = 16))
+		self.csr.add("uart1_phy", use_loc_if_exists=True)
+		self.csr.add("uart1", use_loc_if_exists=True)
+		if hasattr(self.cpu, "interrupt"):
+			self.irq.add("uart1", use_loc_if_exists=True)
+		else:
+			self.add_constant("UART_POLLING")
 		
 		#camara
 		#SoCCore.add_csr(self,"camara_cntrl")

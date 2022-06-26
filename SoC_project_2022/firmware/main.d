@@ -30,7 +30,8 @@ main.o: main.c \
  /home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/build/nexys4ddr/software/include/generated/soc.h \
  /home/alejo/litex/litex/soc/software/include/hw/common.h \
  /home/alejo/litex/litex/soc/software/libbase/uart.h \
- /home/alejo/litex/litex/soc/software/libbase/console.h delay.h display.h
+ /home/alejo/litex/litex/soc/software/libbase/console.h delay.h display.h \
+ uart1.h
 
 /home/alejo/pythondata-software-picolibc/pythondata_software_picolibc/data/newlib/libc/tinystdio/stdio.h:
 
@@ -99,3 +100,5 @@ main.o: main.c \
 delay.h:
 
 display.h:
+
+uart1.h:

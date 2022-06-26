@@ -91,6 +91,12 @@ _io = [
     ("hsync", 0, Pins("B11"), IOStandard("LVCMOS33")),
     ("vsync", 0, Pins("B12"), IOStandard("LVCMOS33")),
     
+    ("uart1", 0,
+        Subsignal("tx", Pins("H4")),
+        Subsignal("rx", Pins("H1")),
+        IOStandard("LVCMOS33"),
+    ), 
+    
     ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
     
     ("clk", 0, Pins("E3"), IOStandard("LVCMOS33")),

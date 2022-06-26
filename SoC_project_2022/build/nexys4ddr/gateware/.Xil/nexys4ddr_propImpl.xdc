@@ -123,3 +123,7 @@ set_property src_info {type:XDC file:1 line:245 export:INPUT save:INPUT read:REA
 set_property LOC B11 [get_ports {hsync}]
 set_property src_info {type:XDC file:1 line:249 export:INPUT save:INPUT read:READ} [current_design]
 set_property LOC B12 [get_ports {vsync}]
+set_property src_info {type:XDC file:1 line:253 export:INPUT save:INPUT read:READ} [current_design]
+set_property LOC H4 [get_ports {uart1_tx}]
+set_property src_info {type:XDC file:1 line:257 export:INPUT save:INPUT read:READ} [current_design]
+set_property LOC H1 [get_ports {uart1_rx}]

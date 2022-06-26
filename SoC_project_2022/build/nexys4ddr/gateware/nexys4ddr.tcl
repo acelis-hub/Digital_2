@@ -10,6 +10,10 @@ read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/veril
 read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/PWM/PWM.v}
 read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/PWM/MaquinaEstadosPWM.v}
 read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/PWM/DivFreqPWM.v}
+read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/UART/TOP.v}
+read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/UART/UART_rx.v}
+read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/UART/UART_tx.v}
+read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/module/verilog/UART/UART_baudrate_generator.v}
 read_verilog {/home/alejo/pythondata-cpu-picorv32/pythondata_cpu_picorv32/verilog/picorv32.v}
 read_verilog {/home/alejo/Desktop/Proyecto_Digital/SoC_project_2022/build/nexys4ddr/gateware/nexys4ddr.v}
 
