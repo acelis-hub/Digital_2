@@ -1,4 +1,5 @@
 # Proyecto Final - Digital_2 - 2022-1 - Universidad Nacional de Colombia
+# Birdy - Comedor inteligente de Aves
 
 
 ## Integrantes
@@ -103,8 +104,13 @@ aviaria de un territorio.
 
 # SoC
 
-<img src="SoC.jpeg" width="1200"/>
+<img src="SoC.jpeg" width="980"/>
 
 # Mapa De Memoria y Perifericos
 
 <img src="map.jpg" width="980"/>
+
+# Proyecto Montado
+
+<img src="montaje.jpeg" width="980"/>
+
