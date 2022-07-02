@@ -73,7 +73,7 @@ aviaria de un territorio.
 
 ## Perifericos 
 
-![Arduino](Arduino.png)
+![Arduino](arduino.jpeg)
 
 # SoC
 
