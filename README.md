@@ -75,36 +75,36 @@ aviaria de un territorio.
 
 * Arduino UNO
 
-<img src="arduino.jpeg" width="120"/>
+<img src="arduino.jpeg" width="480"/>
 
 * Bluetooth HC-05
 
-<img src="blue.jpeg" width="120"/>
+<img src="blue.jpeg" width="480"/>
 
 * Camara TTL 640x480
 
-<img src="cam.jpeg" width="120"/>
+<img src="cam.jpeg" width="480"/>
 
 * Modulo tarjeta HC
 
-<img src="sd.jpeg" width="120"/>
+<img src="sd.jpeg" width="480"/>
 
 * Sensor de Proximidad
 
-<img src="sensor.jpeg" width="120"/>
+<img src="sensor.jpeg" width="480"/>
 
 * Servomotor Metalico
 
-<img src="servo.jpeg" width="120"/>
+<img src="servo.jpeg" width="480"/>
 
 ## Presupuesto
 
-<img src="presupuesto.jpeg" width="120"/>
+<img src="presupuesto.jpg" width="980"/>
 
 # SoC
 
-<img src="SoC.jpeg" width="120"/>
+<img src="SoC.jpeg" width="1200"/>
 
 # Mapa De Memoria y Perifericos
 
-<img src="map.jpeg" width="120"/>
+<img src="map.jpg" width="980"/>
